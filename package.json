@@ -1,0 +1,21 @@
+{
+  "name": "notion_sport_report",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@notionhq/client": "^1.0.1",
+    "config": "^3.3.8",
+    "node-cron": "^3.0.2",
+    "node-mailer": "^0.1.1"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1"
+  }
+}
