@@ -1,17 +1,19 @@
-const connectToDb = require('./utils/connectToDb')
+const dbConnect = require('./util/dbConnect')
 
 const createExerciseSetTableSql =
   'CREATE TABLE IF NOT EXISTS exercise_set (\n' +
   'id INTEGER PRIMARY KEY,\n' +
-  'name TEXT NOT NULL,\n' +
+  'name TEXT NOT NULL UNIQUE,\n' +
+  "for_today TEXT DEFAULT 'false',\n" +
+  'type TEXT,\n' +
   'last_update_datetime NUMERIC NOT NULL\n' +
   ');'
 
-const createExercisesTableSql =
+const createExerciseTableSql =
   'CREATE TABLE IF NOT EXISTS exercise (\n' +
   'id INTEGER PRIMARY KEY,\n' +
-  'ex_set_id INTEGER NOT NULL,\n' +
-  'count INTEGER DEFAULT 0,\n' +
+  'ex_set_id INTEGER,\n' +
+  'name TEXT NOT NULL UNIQUE,\n' +
   'last_update_datetime NUMERIC NOT NULL,\n' +
   'FOREIGN KEY (ex_set_id) REFERENCES exercise_set (id) ON DELETE CASCADE ON UPDATE NO ACTION\n' +
   ');'
@@ -27,14 +29,22 @@ const createLastSetCountTableSql =
   'FOREIGN KEY (ex_set_id) REFERENCES exercise_set (id) ON DELETE CASCADE ON UPDATE NO ACTION\n' +
   ');'
 
+const createNotionDbIdTableSql =
+  'CREATE TABLE IF NOT EXISTS notion_db_id (\n' +
+  'id INTEGER NOT NULL,\n' +
+  'database_id TEXT NOT NULL,\n' +
+  'PRIMARY KEY(id)\n' +
+  ');'
+
 const initSqls = new Map()
 
 initSqls.set('exercise_set', createExerciseSetTableSql)
-initSqls.set('exercise', createExercisesTableSql)
+initSqls.set('exercise', createExerciseTableSql)
 initSqls.set('last_set_count', createLastSetCountTableSql)
+initSqls.set('notion_db_id', createNotionDbIdTableSql)
 
-const initializeDb = () => {
-  const db = connectToDb()
+const initializeDb = async () => {
+  const db = dbConnect()
 
   db.serialize(() => {
     initSqls.forEach((sql, tableName) => {
@@ -49,7 +59,5 @@ const initializeDb = () => {
 
   db.close()
 }
-
-initializeDb()
 
 module.exports = initializeDb

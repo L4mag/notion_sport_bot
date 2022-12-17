@@ -1,5 +1,9 @@
-config/default.json
 .idea
 
 # Project exclude paths
 /node_modules/
+config/default.json
+db/notion.db
+notion.db
+test.js
+.gitignore

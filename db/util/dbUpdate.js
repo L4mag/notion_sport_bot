@@ -3,7 +3,7 @@ const dbConnect = require('./dbConnect')
 const dbUpdate = (sql) => {
   const db = dbConnect()
 
-  console.log(sql)
+  // console.log(sql)
 
   db.serialize(() => {
     db.run(sql, (err) => {

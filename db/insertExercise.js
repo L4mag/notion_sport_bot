@@ -1,7 +1,16 @@
-const dbInsert = require('./utils/dbInsert')
+const dbInsert = require('./util/dbInsert')
 
-const insertExercise = (exercise) => {
-  dbInsert('exercise', new Map([['name', exercise]]))
+const insertExercise = (
+  exercise,
+  lastUpdateDatetime = new Date()
+) => {
+  return dbInsert(
+    'exercise',
+    new Map([
+      ['name', exercise],
+      ['last_update_datetime', lastUpdateDatetime],
+    ])
+  )
 }
 
 module.exports = insertExercise

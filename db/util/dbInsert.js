@@ -5,12 +5,16 @@ const dbInsert = (table, data) => {
   const db = dbConnect()
 
   const fieldsTemp = String([...data.keys()])
-  const valuesTemp = String([...data.values()])
+  const valuesTemp = String([...data.values()].map(d=>`\'${d}\'`))
 
   db.serialize(() => {
+    console.log(
+      `INSERT INTO ${table} (${fieldsTemp})\n` +
+        `VALUES(${valuesTemp})`
+    )
     db.run(
-      `INSERT INTO ${table} (${fieldsTemp}, last_update_datetime)\n` +
-        `VALUES(\'${valuesTemp}\', datetime(\'now\', \'localtime\'))`,
+      `INSERT INTO ${table} (${fieldsTemp})\n` +
+        `VALUES(${valuesTemp})`,
       (err) => {
         if (err) {
           return console.error(err.message)

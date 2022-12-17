@@ -5,7 +5,6 @@ const dbConnect = (filePath = './db/notion.db') => {
     if (err) {
       return console.error(err.message)
     }
-    console.log('Connected to the in-file SQlite database.')
   })
 }
 
