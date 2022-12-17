@@ -26,10 +26,10 @@ jobs:
           node-version: '14.x'
       - name: Install dependencies
         run: npm install
-      - name: Install dependencies
-        run: ls
-      - name: Run test
-        run: npm test
+      - name: Create config
+        run: mkdir ./config && touch ./config/default.json && echo secrets.TEST_CONFIG >> ./config/default.json
+      - name: Run app start
+        run: npm start
 
   # deploy:
   #   # The type of runner that the job will run on
