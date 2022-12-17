@@ -70,6 +70,7 @@ initializeDb().then((r) => {
       //Setting today's exercises set
       //TODO: Find a better way for creating function that can update any table with any data
       setTodaysSet().then(() => {})
+      //git test change
     }
   )
 })
