@@ -39,12 +39,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v0.1.6
-
+      - name: ssh scp ssh pipelines
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        env:
+          WELCOME: 'ssh scp ssh pipelines'
+          LASTSSH: 'Doing something after copying'
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: ls
+          user: ${{ secrets.USERNAME }}
+          pass: ${{ secrets.PASSWORD }}
+          connect_timeout: 10s
+          first_ssh: |
+            rm -rf ~/github/test
+            ls -la  \necho $WELCOME 
+            mkdir -p ~/github/test/test1 && 
+            mkdir -p ~/github/test/test2 &&
+          scp: |
+            './*' => ~/github/test/
+            ./test/test1* => ~/github/test/test1/
+            ./test/test*.csv => "~/github/test/test2/"
+          last_ssh: |
+            echo $LASTSSH && 
+            (mkdir test1/test || true)
+            || ls -la
