@@ -39,26 +39,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ssh scp test
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      - name: ssh pipelines
+        uses: cross-the-world/ssh-pipeline@master
         env:
-          WELCOME: 'ssh scp test'
-          LASTSSH: 'Doing something after copying'
+          WELCOME: 'ssh pipelines test start'
+          LASTSSH: 'ssh pipelines test end'
+          DIR: 'notion_sport_bot'
+          GITLINK: 'https://github.com/L4mag/notion_sport_bot'
         with:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USERNAME }}
           pass: ${{ secrets.PASSWORD }}
           connect_timeout: 10s
-          first_ssh: |
-            rm -rf ~/github/test
+          script: |
             echo $WELCOME 
-            mkdir -p ~/github/test/test1 && 
-            mkdir -p ~/github/test/test2 &&
-          scp: |
-            './*' => ~/github/test/
-            ./test/test1* => ~/github/test/test1/
-            ./test/test*.csv => "~/github/test/test2/"
-          last_ssh: |
-            echo $LASTSSH && 
-            (mkdir test1/test || true)
-            || ls -la
+            cd ~/github
+            [ ! -d $DIR ] && echo "Directory $DIR DOES NOT exists." && git clone $GITLINK
+            cd $DIR
+            npm start
+            echo $LASTSSH
