@@ -39,10 +39,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ssh scp ssh pipelines
+      - name: ssh scp test
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
-          WELCOME: 'ssh scp ssh pipelines'
+          WELCOME: 'ssh scp test'
           LASTSSH: 'Doing something after copying'
         with:
           host: ${{ secrets.HOST }}
@@ -51,7 +51,7 @@ jobs:
           connect_timeout: 10s
           first_ssh: |
             rm -rf ~/github/test
-            ls -la  \necho $WELCOME 
+            echo $WELCOME 
             mkdir -p ~/github/test/test1 && 
             mkdir -p ~/github/test/test2 &&
           scp: |
