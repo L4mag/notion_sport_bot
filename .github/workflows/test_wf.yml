@@ -55,6 +55,9 @@ jobs:
             echo $WELCOME 
             cd ~/github
             [ ! -d $DIR ] && echo "Directory $DIR DOES NOT exists." && git clone $GITLINK
+            git fetch
             cd $DIR
+            ls
+            npm i
             npm start
             echo $LASTSSH
