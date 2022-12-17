@@ -56,11 +56,13 @@ initializeDb().then((r) => {
         //Updating FOREIGN KEY ex_set_id for  exercises in a local SQLite DB
         //TODO: Find a better way for creating function that can update any table with any data
         dbUpdate(
-          `UPDATE exercise \n` +
-            `SET ex_set_id = ex_set.id\n` +
-            `FROM exercise_set ex_set\n` +
-            `WHERE ex_set.name like '%${exercisesData.setName}%'\n` +
-            `and exercise.name in (${exercisesData.exercises.map(
+          `UPDATE exercise
+            SET ex_set_id = ex_set.id
+            FROM exercise_set ex_set
+            WHERE ex_set.name like '%${
+              exercisesData.setName
+            }%'
+            and exercise.name in (${exercisesData.exercises.map(
               (ex) => String(`\'${ex}\'`)
             )})`
         )
