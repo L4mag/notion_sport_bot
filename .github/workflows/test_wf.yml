@@ -44,6 +44,8 @@ jobs:
         env:
           WELCOME: 'ssh pipelines test start'
           LASTSSH: 'ssh pipelines test end'
+          DIR: 'notion_sport_bot'
+          GITLINK: 'https://github.com/L4mag/notion_sport_bot'
         with:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USERNAME }}
@@ -52,7 +54,7 @@ jobs:
           script: |
             echo $WELCOME 
             cd ~/github
-            git clone https://github.com/L4mag/notion_sport_bot
-            cd notion_sport_bot
+            [ ! -d $DIR ] && echo "Directory $DIR DOES NOT exists." && git clone $GITLINK
+            cd $DIR
             npm start
             echo $LASTSSH
