@@ -1,4 +1,5 @@
-#Notion Sport Bot
+# Notion Sport Bot
+
 This is the service that helps you to track your sport activities using Notion.
 List of features:
 
@@ -7,5 +8,6 @@ List of features:
 - Compare your results with the previous day
 - Reps goal for today using previous day result
 
-##How to setup config
+## How to setup config
+
 ...
