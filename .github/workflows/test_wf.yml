@@ -27,9 +27,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Create config
-        run: mkdir ./config && touch ./config/default.json && echo ${{ secrets.TEST_CONFIG }} >> ./config/default.json
+        env:
+          TEST_CONFIG: ${{ secrets.TEST_CONFIG }}
+        run: mkdir ./config && touch ./config/default.json && echo $TEST_CONFIG >> ./config/default.json
       - name: Create config
-        run: echo ${{ secrets.TEST_CONFIG }}
+        run: echo ${{ secrets.TEST_CONFIG }} && echo $TEST_CONFIG
       - name: Run app start
         run: npm start
 
