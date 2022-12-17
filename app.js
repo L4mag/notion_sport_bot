@@ -71,6 +71,7 @@ initializeDb().then((r) => {
       //TODO: Find a better way for creating function that can update any table with any data
       setTodaysSet().then(() => {})
       //git test change
+      //git brach test
     }
   )
 })
