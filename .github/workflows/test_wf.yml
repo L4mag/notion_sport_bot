@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Install dependencies
-        run: touch ./config/default.json && echo secrets.TEST_CONFIG >> ./config/default.json
+        run: ls
       - name: Run test
         run: npm test
 
