@@ -9,10 +9,10 @@ const dbInsert = (table, data) => {
   )
 
   db.serialize(() => {
-    console.log(
-      `INSERT INTO ${table} (${fieldsTemp})
-       VALUES(${valuesTemp})`
-    )
+    // console.log(
+    //   `INSERT INTO ${table} (${fieldsTemp})
+    //    VALUES(${valuesTemp})`
+    // )
     db.run(
       `INSERT INTO ${table} (${fieldsTemp})
         VALUES(${valuesTemp})`,

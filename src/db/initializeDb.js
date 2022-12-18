@@ -26,34 +26,27 @@ const createLastSetCountTableSql = `CREATE TABLE IF NOT EXISTS last_set_count (
   FOREIGN KEY (ex_set_id) REFERENCES exercise_set (id) ON DELETE CASCADE ON UPDATE NO ACTION
   );`
 
-const createNotionDbIdTableSql = `CREATE TABLE IF NOT EXISTS notion_db_id (
-  id INTEGER NOT NULL,
-  database_id TEXT NOT NULL,
-  PRIMARY KEY(id)
-  );`
-
 const initSqls = new Map()
 
 initSqls.set('exercise_set', createExerciseSetTableSql)
 initSqls.set('exercise', createExerciseTableSql)
 initSqls.set('last_set_count', createLastSetCountTableSql)
-initSqls.set('notion_db_id', createNotionDbIdTableSql)
 
-const initializeDb = async() => {
-    const db = dbConnect()
+const initializeDb = async () => {
+  const db = dbConnect()
 
-    db.serialize(() => {
-        initSqls.forEach((sql, tableName) => {
-            db.run(sql, (err) => {
-                if (err) {
-                    return console.error(err.message)
-                }
-                console.log(`table ${tableName} has been created.`)
-            })
-        })
+  db.serialize(() => {
+    initSqls.forEach((sql, tableName) => {
+      db.run(sql, (err) => {
+        if (err) {
+          return console.error(err.message)
+        }
+        console.log(`table ${tableName} has been created.`)
+      })
     })
+  })
 
-    db.close()
+  db.close()
 }
 
 module.exports = initializeDb
