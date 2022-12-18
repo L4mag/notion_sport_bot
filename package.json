@@ -1,25 +1,26 @@
 {
-    "name": "notion_sport_report",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "start": "node ./src/app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@notionhq/client": "^1.0.1",
-        "config": "^3.3.8",
-        "node-cron": "^3.0.2",
-        "node-mailer": "^0.1.1",
-        "sqlite3": "^5.1.2"
-    },
-    "devDependencies": {
-        "jest": "^29.3.1",
-        "prettier": "2.7.1",
-        "supertest": "^6.3.3"
-    }
+  "name": "notion_sport_report",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@notionhq/client": "^1.0.1",
+    "config": "^3.3.8",
+    "node-cron": "^3.0.2",
+    "node-mailer": "^0.1.1",
+    "npid": "^0.4.0",
+    "sqlite3": "^5.1.2"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "prettier": "2.7.1",
+    "supertest": "^6.3.3"
+  }
 }

@@ -1,6 +1,7 @@
 const { Client } = require('@notionhq/client')
 const fs = require('fs')
 const formatDate = require('./util/formatDate')
+const path = require('path')
 const cron = require('node-cron')
 const nodemailer = require('nodemailer')
 const config = require('config')
@@ -41,9 +42,11 @@ initializeDb().then((r) => {
       )
 
       data.map((exercisesData) => {
-        // console.log(new Date(exercisesData.lastEditedTime))
-        //inserting exercise sets to a local SQLite DB
-        insertExerciseSet(exercisesData.setName)
+        // inserting exercise sets to a local SQLite DB
+        insertExerciseSet(
+          exercisesData.setName,
+          exercisesData.lastEditedTime
+        )
         exercisesData.exercises.map((ex) => {
           //inserting exercises to a local SQLite DB
           checkExercisesUpdates(
@@ -72,8 +75,6 @@ initializeDb().then((r) => {
       //Setting today's exercises set
       //TODO: Find a better way for creating function that can update any table with any data
       setTodaysSet().then(() => {})
-      //git test change
-      //git brach test
     }
   )
 })

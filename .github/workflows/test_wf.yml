@@ -35,22 +35,24 @@ jobs:
       - name: Run app start
         run: npm start
 
-  # deploy:
-  #   # The type of runner that the job will run on
-  #   runs-on: ubuntu-latest
-  #   needs: [build]
-  #   steps:
-  #     - name: ssh pipelines
-  #       uses: cross-the-world/ssh-pipeline@master
-  #       env:
-  #         WELCOME: 'ssh pipelines test start'
-  #         LASTSSH: 'ssh pipelines test end'
-  #         DIR: 'notion_sport_bot'
-  #         GITLINK: 'https://github.com/L4mag/notion_sport_bot'
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         user: ${{ secrets.USERNAME }}
-  #         pass: ${{ secrets.PASSWORD }}
-  #         connect_timeout: 10s
-  #         script: |
-  #           echo $WELCOME; cd ~/github; [ ! -d $DIR ] && echo "Directory $DIR DOES NOT exists." && git clone $GITLINK; cd $DIR && git fetch && ls && npm i && npm start && echo $LASTSSH;
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Job that need to be completed for the run of this job
+    needs: [build]
+    steps:
+      - name: ssh pipelines
+        uses: cross-the-world/ssh-pipeline@master
+        env:
+          WELCOME: 'ssh pipelines test start'
+          LASTSSH: 'ssh pipelines test end'
+          DIR: 'notion_sport_bot'
+          GITLINK: 'https://github.com/L4mag/notion_sport_bot'
+        with:
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USERNAME }}
+          pass: ${{ secrets.PASSWORD }}
+          connect_timeout: 10s
+          # Cloning repo if project directory doesn't exists, fetching, installing npm dependencies and testing project
+          script: |
+            echo $WELCOME; cd ~/github; [ ! -d $DIR ] && echo "Directory $DIR DOES NOT exists." && git clone $GITLINK; cd $DIR && git fetch && ls && npm i && npm run test && echo $LASTSSH;
