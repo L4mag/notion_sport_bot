@@ -14,6 +14,7 @@ const dbUpdate = require('./db/util/dbUpdate')
 const populateLastExerciseCount = require('./db/populateLastExerciseCount')
 const setTodaysSet = require('./db/setTodaysSet')
 const checkExercisesUpdates = require('./db/checkExercisesUpdates')
+const c = require('config')
 
 const MAIL_USER = config.get('MailService.USER')
 const MAIL_PASS = config.get('MailService.PASS')
@@ -31,35 +32,30 @@ const EXERCISE_SETS_DB_ID = config.get(
 
 const notion = new Client({ auth: NOTION_KEY })
 
-initializeDb().then((r) => {
-  //getting exercises and exercises sets from notion database
-  getNotionExercises(notion, EXERCISE_SETS_DB_ID).then(
-    (data) => {
-      const maxUpdateDateNotion = new Date(
-        Math.max(
-          ...data.map((d) => new Date(d.lastEditedTime))
-        )
-      )
+initializeDb()
+  .then((r) => {
+    //getting exercises and exercises sets from notion database
+    getNotionExercises(notion, EXERCISE_SETS_DB_ID).then(
+      (data) => {
+        data.map((exercisesData) => {
+          const setLastEditedTime =
+            exercisesData.lastEditedTime
 
-      data.map((exercisesData) => {
-        // inserting exercise sets to a local SQLite DB
-        insertExerciseSet(
-          exercisesData.setName,
-          exercisesData.lastEditedTime
-        )
-        exercisesData.exercises.map((ex) => {
-          //inserting exercises to a local SQLite DB
-          checkExercisesUpdates(
-            maxUpdateDateNotion,
-            insertExercise,
-            ex
+          // inserting exercise sets to a local SQLite DB
+          insertExerciseSet(
+            exercisesData.setName,
+            exercisesData.lastEditedTime
           )
-        })
-
-        //Updating FOREIGN KEY ex_set_id for  exercises in a local SQLite DB
-        //TODO: Find a better way for creating function that can update any table with any data
-        dbUpdate(
-          `UPDATE exercise
+            .then(() => {
+              checkExercisesUpdates(
+                setLastEditedTime,
+                insertExercise,
+                exercisesData
+              )
+            })
+            .then(() => {
+              dbUpdate(
+                `UPDATE exercise
             SET ex_set_id = ex_set.id
             FROM exercise_set ex_set
             WHERE ex_set.name like '%${
@@ -68,13 +64,22 @@ initializeDb().then((r) => {
             and exercise.name in (${exercisesData.exercises.map(
               (ex) => String(`\'${ex}\'`)
             )})`
-        )
-      })
+              )
+            })
+            .then(() => {
+              // Updating FOREIGN KEY ex_set_id for  exercises in a local SQLite DB
+              // TODO: Find a better way for creating function that can update any table with any data
+            })
+        })
 
-      populateLastExerciseCount()
-      //Setting today's exercises set
-      //TODO: Find a better way for creating function that can update any table with any data
-      setTodaysSet().then(() => {})
-    }
-  )
-})
+        //Setting today's exercises set
+        //TODO: Find a better way for creating function that can update any table with any data
+      }
+    )
+  })
+  .then(() => {
+    populateLastExerciseCount()
+  })
+  .then(() => {
+    setTodaysSet()
+  })

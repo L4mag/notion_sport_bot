@@ -1,14 +1,11 @@
 const dbInsert = require('./util/dbInsert')
 
-const insertExercise = (
-  exercise,
-  lastUpdateDatetime = new Date()
-) => {
+const insertExercise = (exercise, lastEditedTime) => {
   return dbInsert(
     'exercise',
     new Map([
       ['name', exercise],
-      ['last_update_datetime', lastUpdateDatetime],
+      ['last_update_datetime', lastEditedTime],
     ])
   )
 }
