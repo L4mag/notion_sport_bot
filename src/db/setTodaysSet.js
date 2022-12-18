@@ -3,7 +3,7 @@ const dbConnect = require('./util/dbConnect')
 const setTodaysSet = async () => {
   const db = dbConnect()
 
-  const selectTodaysSetSql = `SELECT * FROM exercise_set WHERE name <> 'Daily'\n`
+  const selectTodaysSetSql = `SELECT * FROM exercise_set WHERE name <> 'Daily'`
 
   db.serialize(() => {
     db.all(selectTodaysSetSql, (err, rows) => {

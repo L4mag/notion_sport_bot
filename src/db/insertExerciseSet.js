@@ -1,6 +1,9 @@
 const dbInsert = require('./util/dbInsert')
 
-const insertExerciseSet = (setName, lastEditedTime) => {
+const insertExerciseSet = async (
+  setName,
+  lastEditedTime
+) => {
   return dbInsert(
     'exercise_set',
     new Map([

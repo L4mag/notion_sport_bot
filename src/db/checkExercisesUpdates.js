@@ -7,24 +7,33 @@ const checkExercisesUpdates = async (
 ) => {
   const db = dbConnect()
 
-  const selectLastUpdateDateSql = `SELECT last_update_datetime FROM exercise\n`
+  const selectLastUpdateDateSql = `SELECT max(ex.last_update_datetime) FROM exercise_set es
+  join exercise ex ON ex.ex_set_id = es.id
+  WHERE es.name = \'${updateData.setName}\'`
 
   db.serialize(() => {
-    db.all(selectLastUpdateDateSql, (err, rows) => {
+    db.get(selectLastUpdateDateSql, (err, row) => {
       if (err) {
         return console.error(err.message)
       }
+      if (!row) {
+        return updateData.exercises.map((ex) => {
+          updateExercises(ex, updateData.lastEditedTime)
+        })
+      }
 
-      console.log('checkExercisesUpdates()')
-      const maxDateFromDb = Math.max(
-        ...rows.map((r) => new Date(r.last_update_datetime))
-      )
+      const dateFromDb = new Date(row.last_update_datetime)
+      const dateToCompareF = new Date(dateToCompare)
 
-      if (dateToCompare === maxDateFromDb) {
+      if (
+        dateFromDb.getTime() === dateToCompareF.getTime()
+      ) {
         return console.log('Exercises is up to date')
       }
 
-      updateExercises(updateData)
+      updateData.exercises.map((ex) => {
+        updateExercises(ex, updateData.lastEditedTime)
+      })
     })
   })
   db.close()
